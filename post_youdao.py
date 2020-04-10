@@ -3,7 +3,7 @@ import requests
 import time
 
 url="http://fanyi.youdao.com/translate_o?smartresult=dict&smartresult=rule"
-
+content="我和你"
 
 def get_salt():
     s=str(random.randint(0,10))
@@ -14,20 +14,35 @@ def get_salt():
     return  t+s
     # return '15846848803956'
 
+def get_md5(value):
+    import hashlib
+    m = hashlib.md5()
+    m.update(value.encode("utf-8"))
+    return m.hexdigest()
 
 def get_sign():
-    return 'b1537e6e7d4296b0145432358da1fce0'
+    i=get_salt()
+    e=get_content()
+    s="fanyideskweb" + e + i + "Nw(nmmbP%A-r6U3EUn]Aj"
+    # print("s=",s,"  md5=",get_md5(s))
+    return get_md5(s)
+    # return '1537e6e7d4296b0145432358da1fce0'
 
 
 def get_ts():
     t = time.time()
     ts = str(int(round(t * 1000)))
+    print("ts=",ts)
     return ts
     # '1585615400595'
 
 
+def get_content():
+    return content
+
+
 form_data={
-    'i':'我和你都是中国',
+    'i': get_content(),
     'from':'AUTO',
     'to':'AUTO',
     'smartresult':'dict',
@@ -41,6 +56,23 @@ form_data={
     'keyfrom':'fanyi.web',
     'action':'FY_BY_REALTlME',
 }
-response=requests.post(url,form_data)
-print(response.text)
+
+
+def get_headers():
+    headers={
+        'Cookie': 'OUTFOX_SEARCH_USER_ID=-715101748@10.108.160.17; JSESSIONID=aaam7kNNEvn887axRKIfx; OUTFOX_SEARCH_USER_ID_NCOO=1372491966.423369; ___rl__test__cookies=1586496832856',
+        'Referer': 'http://fanyi.youdao.com/',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36',
+    }
+    return headers
+
+
+
+
+if __name__ == '__main__':
+    # ts=get_ts()
+    print(form_data)
+    print(get_headers())
+    response=requests.post(url, data=form_data, headers=get_headers())
+    print(response.text)
 
