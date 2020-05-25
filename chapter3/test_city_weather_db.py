@@ -1,6 +1,7 @@
 import unittest
 
 from chapter3.city_weather import HeFeng
+<<<<<<< HEAD
 from chapter3.city_weather_db import HefengDb
 
 
@@ -28,6 +29,18 @@ class TestCityWeatherDbCase(unittest.TestCase):
         self.assertEqual(7,hefengDb.count())
         hefengDb.delete()
 
+=======
+from chapter3.city_weather_db import HeFengDb
+
+
+class TestCityWeatherDb(unittest.TestCase):
+    def test_save_all(self):
+        hefeng=HeFeng()
+        weathers=hefeng.get_all_weather()
+        hefengdb=HeFengDb()
+        hefengdb.save_all(weathers)
+        self.assertEqual(True, True)
+>>>>>>> 7a339e53adc5392cac0a74a4bf160861ae12272b
 
 if __name__ == '__main__':
     unittest.main()
