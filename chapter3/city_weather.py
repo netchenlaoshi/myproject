@@ -1,3 +1,5 @@
+import time
+
 import requests
 
 
@@ -19,11 +21,13 @@ class HeFeng():
         i=0
         while i<count_of_citys:
             each=self.get_weather(next(codes))
+            print(each)
             weathers.append(each)
             i=i+1
         return weathers
 
     def get_weather(self,city_code):
+        time.sleep(1)
         url=self.pre_request+city_code+self.sub_request
         info=requests.get(url)
         info.encoding= self.encoding
